@@ -1,7 +1,9 @@
 package org.app.tobyspring;
 
+import java.math.BigDecimal;
+
 public class PaymentService {
-    public Payment prepare(){
+    public Payment prepare(Long orderId, String currency, BigDecimal amount) {
         return new Payment();
     };
 
