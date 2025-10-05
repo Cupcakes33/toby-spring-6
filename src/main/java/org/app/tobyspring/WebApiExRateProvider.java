@@ -11,10 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.stream.Collectors;
 
-public class WebApiExRatePaymentService extends PaymentService {
-
-    @Override
-    public BigDecimal getExRate(String currency) throws IOException {
+public class WebApiExRateProvider {
+    public BigDecimal getWebExRate(String currency) throws IOException {
         final String response;
 
         URL url = new URL("https://open.er-api.com/v6/latest/" + currency);
