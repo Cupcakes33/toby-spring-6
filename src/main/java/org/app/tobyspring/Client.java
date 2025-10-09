@@ -1,5 +1,7 @@
 package org.app.tobyspring;
 
+import org.app.tobyspring.payment.Payment;
+import org.app.tobyspring.payment.PaymentService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
