@@ -13,5 +13,19 @@ public class Client {
 
         Payment payment = paymentService.prepare(100L, "USD", BigDecimal.valueOf(52.7));
         System.out.println(payment);
+        Payment payment2 = paymentService.prepare(100L, "USD", BigDecimal.valueOf(52.7));
+        System.out.println(payment2);
+        Payment payment3 = paymentService.prepare(100L, "USD", BigDecimal.valueOf(52.7));
+        System.out.println(payment3);
+        Payment payment4 = paymentService.prepare(100L, "USD", BigDecimal.valueOf(52.7));
+        System.out.println(payment4);
+        Payment payment5 = paymentService.prepare(100L, "USD", BigDecimal.valueOf(52.7));
+        System.out.println(payment5);
+        Payment payment6 = paymentService.prepare(100L, "USD", BigDecimal.valueOf(52.7));
+        System.out.println(payment6);
+        Payment payment7 = paymentService.prepare(100L, "USD", BigDecimal.valueOf(52.7));
+        System.out.println(payment7);
+
+
     }
 }
