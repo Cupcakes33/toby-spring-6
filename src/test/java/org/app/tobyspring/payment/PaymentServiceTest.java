@@ -18,17 +18,17 @@ class PaymentServiceTest {
     @DisplayName("prepare 메서드는 요구사항 3가지를 충족한다.")
     void prepare() throws IOException {
         // given
-        PaymentService paymentService = new PaymentService(new WebApiExRateProvider());
+        PaymentService paymentService = new PaymentService(new ExRateProviderStub(BigDecimal.valueOf(100)));
 
         // when
-        Payment payment = paymentService.prepare(1L, "USD", new BigDecimal("100"));
+        Payment payment = paymentService.prepare(1L, "USD", new BigDecimal(100));
 
         // then
         // 환율정보 가져오기
-        assertThat(payment.getExRate()).isNotNull();
+        assertThat(payment.getExRate()).isEqualTo(BigDecimal.valueOf(100));
 
         // 원화환산금액 계산
-        assertThat(payment.getConvertedAmount()).isEqualTo(payment.getExRate().multiply(payment.getForeignCurrencyAmount()));
+        assertThat(payment.getConvertedAmount()).isEqualTo(BigDecimal.valueOf(10000));
 
         // 원화환산금액의 유효시간 계산
         assertThat(payment.getValidUntil()).isBefore(LocalDateTime.now().plusMinutes(30));
