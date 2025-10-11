@@ -2,6 +2,8 @@
 package org.app.tobyspring.payment;
 
 import org.app.tobyspring.TestObjectFactory;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +15,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.LocalDateTime;
 
 import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -23,6 +27,14 @@ class SpringPaymentServiceTest {
     @Autowired PaymentService paymentService;
     @Autowired ExRateProviderStub exRateProviderStub;
 
+    static Clock clock = null;
+
+    @Test
+    @BeforeEach
+    void setUp() {
+        clock = Clock.systemDefaultZone();
+    }
+
     @Test
     @DisplayName("prepare 메서드는 요구사항 3가지를 충족한다.")
     void prepare() throws IOException {
@@ -32,10 +44,16 @@ class SpringPaymentServiceTest {
         exRateProviderStub.setExRate(valueOf(500));
         Payment payment2 = paymentService.prepare(1L, "USD", new BigDecimal(100));
         assertPaymentAmount(payment2, valueOf(500), valueOf(50000));
-
+        assertValidUntil(payment2);
     }
     private static void assertPaymentAmount(Payment payment, BigDecimal exRate, BigDecimal convertedExRate) throws IOException{
         assertThat(payment.getExRate()).isEqualByComparingTo(exRate);
         assertThat(payment.getConvertedAmount()).isEqualByComparingTo(convertedExRate);
     }
+
+    private static void assertValidUntil(Payment payment) {
+        LocalDateTime dt1 = LocalDateTime.now(clock);
+        assertThat(payment.getValidUntil()).isAfter(dt1.plusMinutes(29));
+    }
+
 }
