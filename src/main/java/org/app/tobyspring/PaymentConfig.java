@@ -1,26 +1,35 @@
 package org.app.tobyspring;
 
 import org.app.tobyspring.exRate.CachedExRateProvider;
-import org.app.tobyspring.exRate.WebApiExRateProvider;
 import org.app.tobyspring.payment.ExRateProvider;
-import org.app.tobyspring.payment.ExRateProviderStub;
+import org.app.tobyspring.exRate.WebApiExRateProvider;
 import org.app.tobyspring.payment.PaymentService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import static java.math.BigDecimal.valueOf;
+import java.time.Clock;
 
 @Configuration
 @ComponentScan
-public class TestObjectFactory {
+public class PaymentConfig {
     @Bean
     public PaymentService paymentService() {
-        return new PaymentService(exRateProvider());
+        return new PaymentService(cachedExRateProvider(), clock());
+    }
+
+    @Bean
+    public ExRateProvider cachedExRateProvider() {
+        return new CachedExRateProvider(exRateProvider());
     }
 
     @Bean
     public ExRateProvider exRateProvider() {
-        return new ExRateProviderStub(valueOf(100));
+        return new WebApiExRateProvider();
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemDefaultZone();
     }
 }
