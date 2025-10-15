@@ -1,5 +1,6 @@
 package org.app.tobyspring;
 
+import org.app.tobyspring.api.ApiTemplate;
 import org.app.tobyspring.exRate.CachedExRateProvider;
 import org.app.tobyspring.payment.ExRateProvider;
 import org.app.tobyspring.exRate.WebApiExRateProvider;
@@ -25,7 +26,7 @@ public class PaymentConfig {
 
     @Bean
     public ExRateProvider exRateProvider() {
-        return new WebApiExRateProvider();
+        return new WebApiExRateProvider(new ApiTemplate(new org.app.tobyspring.api.ErApiExtractor()));
     }
 
     @Bean
