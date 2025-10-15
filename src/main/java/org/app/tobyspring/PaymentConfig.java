@@ -26,7 +26,12 @@ public class PaymentConfig {
 
     @Bean
     public ExRateProvider exRateProvider() {
-        return new WebApiExRateProvider(new ApiTemplate(new org.app.tobyspring.api.ErApiExtractor()));
+        return new WebApiExRateProvider(apiTemplate());
+    }
+
+    @Bean
+    public ApiTemplate apiTemplate() {
+        return new ApiTemplate(new org.app.tobyspring.api.ErApiExtractor());
     }
 
     @Bean

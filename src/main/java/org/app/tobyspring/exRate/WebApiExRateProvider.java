@@ -19,6 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.stream.Collectors;
 
 public class WebApiExRateProvider implements ExRateProvider {
@@ -32,6 +35,15 @@ public class WebApiExRateProvider implements ExRateProvider {
     public BigDecimal getExRate(String currency) {
         String url = "https://open.er-api.com/v6/latest/" + currency;
 
-        return apiTemplate.getForExRate(url, new HttpClientApiExecutor(), new ErApiExtractor());
+        return apiTemplate.getForExRate(url, uri -> {
+            HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
+
+            try(HttpClient client = HttpClient.newBuilder().build()){
+                return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }, new ErApiExtractor());
+
     }
 }
