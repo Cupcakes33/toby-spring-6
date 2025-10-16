@@ -1,9 +1,13 @@
 package org.app.tobyspring;
 
+import org.app.tobyspring.api.ApiExecutor;
 import org.app.tobyspring.api.ApiTemplate;
+import org.app.tobyspring.api.ErApiExtractor;
+import org.app.tobyspring.api.ExRateExtractor;
+import org.app.tobyspring.api.HttpClientApiExecutor;
 import org.app.tobyspring.exRate.CachedExRateProvider;
-import org.app.tobyspring.payment.ExRateProvider;
 import org.app.tobyspring.exRate.WebApiExRateProvider;
+import org.app.tobyspring.payment.ExRateProvider;
 import org.app.tobyspring.payment.PaymentService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,7 +35,17 @@ public class PaymentConfig {
 
     @Bean
     public ApiTemplate apiTemplate() {
-        return new ApiTemplate(new org.app.tobyspring.api.ErApiExtractor());
+        return new ApiTemplate(apiExecutor(), exRateExtractor());
+    }
+
+    @Bean
+    public ApiExecutor apiExecutor() {
+        return new HttpClientApiExecutor();
+    }
+
+    @Bean
+    public ExRateExtractor exRateExtractor() {
+        return new ErApiExtractor();
     }
 
     @Bean
